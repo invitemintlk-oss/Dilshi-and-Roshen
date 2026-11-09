@@ -20,13 +20,14 @@ export const WEDDING = {
   background: '/l.webp',
   introVideo: '/gemini_generated_video_1c2126fd.mp4',
   introImage: '/couple-intro.webp',
+  dressCodeImage: '/dress-code.webp',
 
   // "Our story" milestones. Add `photo: '/file.jpg'` to show a real photo instead of the icon.
   story: [
-    { title: 'First We Met', year: '2008', icon: 'met' },
-    { title: 'When We Talk', year: '2020', icon: 'talk' },
-    { title: 'Forever Starts', year: '2026', icon: 'forever' },
-  ] as { title: string; year: string; icon: 'met' | 'talk' | 'forever'; photo?: string }[],
+    { title: 'First We Met', year: '2008', icon: 'met', photo: '/f.jpg', focus: 'center 40%' },
+    { title: 'When We Talk', year: '2020', icon: 'talk', photo: '/g.jpg', focus: 'center 12%' },
+    { title: 'Forever Starts', year: '2026', icon: 'forever', photo: '/j.webp', focus: 'center 22%' },
+  ] as { title: string; year: string; icon: 'met' | 'talk' | 'forever'; photo?: string; focus?: string }[],
 
   // Per-section background images (public folder)
   sectionBackgrounds: {

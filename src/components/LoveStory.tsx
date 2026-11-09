@@ -56,7 +56,7 @@ export const LoveStory: React.FC = () => (
               transition={{ duration: 0.9, delay: 0.1 }}
             >
               {/* Painted frame */}
-              <div className="relative shrink-0 w-[46%] sm:w-[52%] aspect-[5/4]">
+              <div className="relative shrink-0 w-[46%] sm:w-[48%] aspect-square">
                 <div
                   className="absolute -inset-2 bg-gradient-to-br from-[#F6C3AE]/70 via-[#FBD9C9]/50 to-[#E8957A]/40 blur-[6px]"
                   style={{ borderRadius: BLOBS[i % BLOBS.length] }}
@@ -66,7 +66,7 @@ export const LoveStory: React.FC = () => (
                   style={{ borderRadius: BLOBS[i % BLOBS.length] }}
                 >
                   {m.photo ? (
-                    <img src={m.photo} alt={m.title} loading="lazy" className="w-full h-full object-cover" />
+                    <img src={m.photo} alt={`${m.title} – ${m.year}`} loading="lazy" className="w-full h-full object-cover" style={{ objectPosition: m.focus || "center" }} />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center text-[#8a4632]">
                       <Icon className="w-8 h-8 sm:w-10 sm:h-10 mb-1" strokeWidth={1.3} />
