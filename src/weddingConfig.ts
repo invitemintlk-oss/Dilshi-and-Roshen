@@ -20,7 +20,7 @@ export const WEDDING = {
   background: '/l.webp',
   introVideo: '/gemini_generated_video_1c2126fd.mp4',
   introImage: '/couple-intro.webp',
-  dressCodeImage: '/dress-code.webp',
+  portraitImage: '/couple-portrait.webp',
 
   // "Our story" milestones. Add `photo: '/file.jpg'` to show a real photo instead of the icon.
   story: [

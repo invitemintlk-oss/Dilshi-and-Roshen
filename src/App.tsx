@@ -12,7 +12,7 @@ import { Footer } from './components/Footer';
 import { IntroOverlay } from './components/IntroOverlay';
 import { HeroContent } from './components/HeroContent';
 import { LoveStory } from './components/LoveStory';
-import { DressCodeStyle } from './components/DressCodeStyle';
+import { CouplePortrait } from './components/CouplePortrait';
 import { WishesForm } from './components/WishesForm';
 import { WEDDING, eventsFor, getInviteType } from './weddingConfig';
 
@@ -117,8 +117,8 @@ export default function App() {
           <Countdown targetDate={weddingDate} />
           <LoveStory />
           <HappyCouple />
+          <CouplePortrait />
           <HomecomingDetails />
-          <DressCodeStyle />
           <NoteFromUs />
           <RSVPForm />
           <WishesForm />
