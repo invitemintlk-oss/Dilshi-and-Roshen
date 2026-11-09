@@ -6,9 +6,9 @@
   --font-sans: "Inter", sans-serif;
   --font-display: "Cormorant Garamond", serif;
 
-  --color-brand-gold: #D4AF37; /* Champagne Gold */
-  --color-brand-gold-light: #F3E5AB;
-  --color-brand-gold-deep: #AA8000;
+  --color-brand-gold: #E8957A;
+  --color-brand-gold-light: #F6C3AE;
+  --color-brand-gold-deep: #8a4632;
   
   --color-brand-primary: #000000;
   --color-brand-primary-light: #999999;
@@ -16,7 +16,7 @@
   --color-brand-primary-muted: #666666;
   
   --color-brand-champagne: #F7E7CE; /* Champagne Gold / Ivory blend */
-  --color-brand-ivory: #FFFFF0; /* Ivory */
+  --color-brand-ivory: #FFF6F0;
   --color-brand-pink: #000000;
   --color-brand-white: #FFFFFF;
   --color-brand-accent: #333333;
@@ -112,6 +112,6 @@
 }
 /* Soft ivory glow behind text so it stays readable over the light floral backgrounds */
 .text-halo {
-  text-shadow: 0 0 2px rgba(255, 250, 240, 0.95), 0 0 10px rgba(255, 250, 240, 0.9), 0 0 22px rgba(255, 250, 240, 0.7);
+  text-shadow: 0 0 2px rgba(255, 246, 240, 0.95), 0 0 10px rgba(255, 246, 240, 0.9), 0 0 22px rgba(255, 246, 240, 0.7);
 }
 .text-halo input, .text-halo textarea, .text-halo select, .text-halo button { text-shadow: none; }

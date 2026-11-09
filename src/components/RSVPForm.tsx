@@ -2,9 +2,27 @@ import React, { useState } from 'react';
 import { submitToGoogleSheet } from '../googleSheets';
 import { Calendar, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
+import { SectionBackground } from './SectionBackground';
+import { WEDDING, eventsFor, getGuestFromUrl, getInviteType, inviteLabel } from '../weddingConfig';
+
+/** Google Calendar link covering only the events this guest is invited to. */
+const buildCalendarUrl = (invite: ReturnType<typeof getInviteType>) => {
+  const events = eventsFor(invite);
+  const fmt = (iso: string) => new Date(iso).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: `${WEDDING.brideName} & ${WEDDING.groomName} Wedding`,
+    dates: `${fmt(events[0].startISO)}/${fmt(events[events.length - 1].endISO)}`,
+    details: events.map((e) => `${e.title}: ${e.time} at ${e.venue}, ${e.address}`).join('\n'),
+    location: `${events[0].venue}, ${events[0].address}`,
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+};
 
 export const RSVPForm: React.FC = () => {
-  const [name, setName] = useState('');
+  const [invite] = useState(getInviteType);
+  const [guest] = useState(getGuestFromUrl);
+  const [name, setName] = useState(guest.displayName);
   const [attending, setAttending] = useState('');
   const [guestCount, setGuestCount] = useState('1');
   const [message, setMessage] = useState('');
@@ -26,17 +44,15 @@ export const RSVPForm: React.FC = () => {
     setIsSubmitting(true);
     setError(null);
     try {
-      const searchParams = new URLSearchParams(window.location.search);
-      const inviteType = searchParams.get('invite') || 'both';
-
       const status = attending === 'yes' ? 'Accepts' : 'Declines';
-      await submitToGoogleSheet('rsvp', { 
-        name, 
-        status, 
+      await submitToGoogleSheet('rsvp', {
+        name: name.trim(),
+        status,
         guestCount: attending === 'yes' ? guestCount : '0',
-        message,
-        inviteType,
-        submittedAt: new Date().toISOString() 
+        message: message.trim(),
+        invitedTo: inviteLabel(invite),
+        inviteLinkName: guest.displayName,
+        submittedAt: new Date().toISOString(),
       });
       setSubmitted(true);
     } catch (err) {
@@ -49,9 +65,10 @@ export const RSVPForm: React.FC = () => {
 
   return (
     <section id="rsvp" className="text-halo w-full py-24 relative overflow-hidden">
+      <SectionBackground src={WEDDING.sectionBackgrounds.rsvp} />
       
       {/* Subtle Glow Effects */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-3/4 bg-[#D4AF37]/5 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-3/4 bg-[#E8957A]/5 blur-[120px] rounded-full pointer-events-none"></div>
 
       <div className="container px-4 md:px-6 mx-auto relative z-10">
         <motion.div 
@@ -61,16 +78,19 @@ export const RSVPForm: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-6xl md:text-7xl font-display text-[#6b4c0f]" style={{ fontFamily: "'Great Vibes', cursive" }}>
+          <h2 className="text-6xl md:text-7xl font-display text-[#8a4632]" style={{ fontFamily: "'Great Vibes', cursive" }}>
             RSVP
           </h2>
           <div className="flex items-center space-x-4">
-            <div className="w-12 md:w-20 h-[1px] bg-gradient-to-r from-transparent to-[#D4AF37]/70"></div>
-            <Sparkles className="w-4 h-4 text-[#6b4c0f] opacity-80" />
-            <div className="w-12 md:w-20 h-[1px] bg-gradient-to-l from-transparent to-[#D4AF37]/70"></div>
+            <div className="w-12 md:w-20 h-[1px] bg-gradient-to-r from-transparent to-[#E8957A]/70"></div>
+            <Sparkles className="w-4 h-4 text-[#8a4632] opacity-80" />
+            <div className="w-12 md:w-20 h-[1px] bg-gradient-to-l from-transparent to-[#E8957A]/70"></div>
           </div>
-          <p className="text-[11px] md:text-sm text-[#3f3220] font-sans tracking-[0.2em] uppercase mt-6 max-w-2xl px-4 leading-relaxed">
+          <p className="text-[11px] md:text-sm text-[#5a3528] font-sans tracking-[0.2em] uppercase mt-6 max-w-2xl px-4 leading-relaxed">
             Where forever begins, and we’d love for you to be there.<br className="hidden sm:block" /> Please let us know if you'll be joining us on our special day.
+          </p>
+          <p className="text-xs md:text-sm text-[#8a4632] font-serif italic">
+            You're invited to: {inviteLabel(invite)}
           </p>
         </motion.div>
 
@@ -81,26 +101,26 @@ export const RSVPForm: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <div className="relative bg-[#fffaf0]/85 backdrop-blur-md p-8 sm:p-12 md:p-16 rounded-[40px] shadow-[0_20px_50px_rgba(120,90,30,0.15)] border border-[#b08a2e]/50 overflow-hidden">
+          <div className="relative bg-[#fff6f0]/85 backdrop-blur-md p-8 sm:p-12 md:p-16 rounded-[40px] shadow-[0_20px_50px_rgba(160,90,60,0.15)] border border-[#d99a82]/50 overflow-hidden">
             
             {/* Decorative Inner Border */}
-            <div className="absolute inset-3 sm:inset-4 border-[1px] border-[#D4AF37]/10 rounded-[30px] pointer-events-none"></div>
+            <div className="absolute inset-3 sm:inset-4 border-[1px] border-[#E8957A]/10 rounded-[30px] pointer-events-none"></div>
 
             {submitted ? (
               <div className="text-center py-10">
-                <p className="text-5xl font-display text-[#6b4c0f] mb-6" style={{ fontFamily: "'Great Vibes', cursive" }}>Thank you!</p>
-                <p className="text-sm md:text-base font-sans text-[#2b2115] tracking-widest uppercase">Your response has been lovingly recorded.</p>
+                <p className="text-5xl font-display text-[#8a4632] mb-6" style={{ fontFamily: "'Great Vibes', cursive" }}>Thank you!</p>
+                <p className="text-sm md:text-base font-sans text-[#4a2a20] tracking-widest uppercase">Your response has been lovingly recorded.</p>
               </div>
             ) : (
               <form onSubmit={handleRSVP} className="relative z-10 space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <label className="block text-[#6b4c0f] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Name</label>
+                    <label className="block text-[#8a4632] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Name</label>
                     <input 
                       type="text" 
                       required 
                       placeholder="Eg: Namal Perera" 
-                      className="w-full bg-white/90 text-[#2b2115] border border-[#b08a2e]/60 rounded-xl px-5 py-4 font-sans focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] outline-none transition-all placeholder:text-[#8a7a5e]"
+                      className="w-full bg-white/90 text-[#4a2a20] border border-[#d99a82]/60 rounded-xl px-5 py-4 font-sans focus:ring-1 focus:ring-[#E8957A] focus:border-[#E8957A] outline-none transition-all placeholder:text-[#b08878]"
                       name="name" 
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -108,21 +128,21 @@ export const RSVPForm: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-[#6b4c0f] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Will you attend?</label>
+                    <label className="block text-[#8a4632] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Will you attend?</label>
                     <div className="relative">
                       <select 
                         name="attending" 
                         required 
                         value={attending}
                         onChange={(e) => setAttending(e.target.value)}
-                        className="w-full bg-white/90 text-[#2b2115] border border-[#b08a2e]/60 rounded-xl px-5 py-4 font-sans appearance-none pr-10 focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] outline-none transition-all"
+                        className="w-full bg-white/90 text-[#4a2a20] border border-[#d99a82]/60 rounded-xl px-5 py-4 font-sans appearance-none pr-10 focus:ring-1 focus:ring-[#E8957A] focus:border-[#E8957A] outline-none transition-all"
                         disabled={isSubmitting}
                       >
-                        <option value="" disabled className="bg-white text-[#5a4a32]">Select an option</option>
-                        <option value="yes" className="bg-white text-[#2b2115]">Yes, I'll be there</option>
-                        <option value="no" className="bg-white text-[#2b2115]">Sorry, I can't make it</option>
+                        <option value="" disabled className="bg-white text-[#6e4436]">Select an option</option>
+                        <option value="yes" className="bg-white text-[#4a2a20]">Yes, I'll be there</option>
+                        <option value="no" className="bg-white text-[#4a2a20]">Sorry, I can't make it</option>
                       </select>
-                      <svg className="w-5 h-5 absolute right-4 top-1/2 transform -translate-y-1/2 text-[#6b4c0f] pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 absolute right-4 top-1/2 transform -translate-y-1/2 text-[#8a4632] pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"></path>
                       </svg>
                     </div>
@@ -135,23 +155,23 @@ export const RSVPForm: React.FC = () => {
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
                   >
-                    <label className="block text-[#6b4c0f] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Number of Guests (including yourself)</label>
+                    <label className="block text-[#8a4632] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Number of Guests (including yourself)</label>
                     <div className="relative">
                       <select 
                         required={attending === 'yes'}
-                        className="w-full bg-white/90 text-[#2b2115] border border-[#b08a2e]/60 rounded-xl px-5 py-4 font-sans appearance-none pr-10 focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] outline-none transition-all"
+                        className="w-full bg-white/90 text-[#4a2a20] border border-[#d99a82]/60 rounded-xl px-5 py-4 font-sans appearance-none pr-10 focus:ring-1 focus:ring-[#E8957A] focus:border-[#E8957A] outline-none transition-all"
                         name="guestCount" 
                         value={guestCount}
                         onChange={(e) => setGuestCount(e.target.value)}
                         disabled={isSubmitting}
                       >
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
-                          <option key={num} value={num} className="bg-white text-[#2b2115]">
+                          <option key={num} value={num} className="bg-white text-[#4a2a20]">
                             {num} {num === 1 ? 'Guest (Just me)' : 'Guests'}
                           </option>
                         ))}
                       </select>
-                      <svg className="w-5 h-5 absolute right-4 top-1/2 transform -translate-y-1/2 text-[#6b4c0f] pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 absolute right-4 top-1/2 transform -translate-y-1/2 text-[#8a4632] pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"></path>
                       </svg>
                     </div>
@@ -159,12 +179,12 @@ export const RSVPForm: React.FC = () => {
                 )}
 
                 <div>
-                  <label className="block text-[#6b4c0f] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Message (Optional)</label>
+                  <label className="block text-[#8a4632] text-xs font-semibold uppercase tracking-[0.2em] mb-3">Message (Optional)</label>
                   <textarea 
                     name="message" 
                     maxLength={250} 
                     rows={4} 
-                    className="w-full bg-white/90 text-[#2b2115] border border-[#b08a2e]/60 rounded-xl px-5 py-4 font-sans focus:ring-1 focus:ring-[#D4AF37] focus:border-[#D4AF37] outline-none transition-all placeholder:text-[#8a7a5e] resize-none" 
+                    className="w-full bg-white/90 text-[#4a2a20] border border-[#d99a82]/60 rounded-xl px-5 py-4 font-sans focus:ring-1 focus:ring-[#E8957A] focus:border-[#E8957A] outline-none transition-all placeholder:text-[#b08878] resize-none" 
                     placeholder="Leave the couple a beautiful note!"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
@@ -177,23 +197,23 @@ export const RSVPForm: React.FC = () => {
                 <div className="pt-6 space-y-4">
                   <button 
                     type="submit" 
-                    className="w-full group relative flex items-center justify-center overflow-hidden rounded-full border border-[#D4AF37] bg-transparent transition-all duration-300 hover:bg-[#D4AF37] py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full group relative flex items-center justify-center overflow-hidden rounded-full border border-[#E8957A] bg-transparent transition-all duration-300 hover:bg-[#E8957A] py-4 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={isSubmitting}
                   >
-                    <span className="absolute inset-0 w-full h-full bg-[#D4AF37] opacity-0 group-hover:opacity-10 transition-opacity duration-300"></span>
-                    <span className="text-xs sm:text-sm font-sans text-[#6b4c0f] group-hover:text-black font-semibold uppercase tracking-[0.3em] transition-colors duration-300">
+                    <span className="absolute inset-0 w-full h-full bg-[#E8957A] opacity-0 group-hover:opacity-10 transition-opacity duration-300"></span>
+                    <span className="text-xs sm:text-sm font-sans text-[#8a4632] group-hover:text-white font-semibold uppercase tracking-[0.3em] transition-colors duration-300">
                       {isSubmitting ? 'Sending...' : 'Send RSVP with Love'}
                     </span>
                   </button>
                   
                   <a 
-                    href="https://www.google.com/calendar/render?action=TEMPLATE&text=Anjalee+%26+Navindu+Wedding&dates=20261210T030000Z/20261210T100000Z&details=Church+ceremony+8.30+AM+at+St.+Lucia's+Cathedral,+Colombo+13.+Poruwa+%26+reception+10.45+AM+-+3.30+PM+at+Cinnamon+Grand+Colombo,+Mahogany+Ballroom.&location=St.+Lucia's+Cathedral,+Colombo+13&sf=true&output=xml" 
+                    href={buildCalendarUrl(invite)} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="w-full group relative flex items-center justify-center overflow-hidden rounded-full border border-[#b08a2e]/50 bg-[#D4AF37]/5 transition-all duration-300 hover:bg-[#D4AF37] py-4 hover:border-[#D4AF37]"
+                    className="w-full group relative flex items-center justify-center overflow-hidden rounded-full border border-[#d99a82]/50 bg-[#E8957A]/5 transition-all duration-300 hover:bg-[#E8957A] py-4 hover:border-[#E8957A]"
                   >
-                    <Calendar className="mr-3 h-4 w-4 text-[#6b4c0f] group-hover:text-black transition-colors duration-300" />
-                    <span className="text-xs sm:text-sm font-sans text-[#6b4c0f] group-hover:text-black font-semibold uppercase tracking-[0.2em] transition-colors duration-300">
+                    <Calendar className="mr-3 h-4 w-4 text-[#8a4632] group-hover:text-white transition-colors duration-300" />
+                    <span className="text-xs sm:text-sm font-sans text-[#8a4632] group-hover:text-white font-semibold uppercase tracking-[0.2em] transition-colors duration-300">
                       Add to Google Calendar
                     </span>
                   </a>

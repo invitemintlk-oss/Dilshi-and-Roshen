@@ -1,27 +1,43 @@
 /**
- * Anjalee & Navindu — Wedding RSVP + Wishes → Google Sheets
+ * Dilshi & Roshen — Wedding RSVP + Wishes → Google Sheets
  *
- * Spreadsheet: https://docs.google.com/spreadsheets/d/19cFsbd5VMS51EDmvPXbyW24qdhHObyWmDB368o6M0a4/edit
+ * Spreadsheet:
+ *   https://docs.google.com/spreadsheets/d/1QTZ_S7wvID0_epx4DoiDBsIQr8iEF2VkSBLW-rPRN7k/edit
  *
- * The "RSVP" and "Wishes" tabs are created automatically (with formatted
- * headers) the first time a response arrives, or when you run setup() once.
+ * HOW TO DEPLOY
+ *   1. Open the spreadsheet → Extensions → Apps Script.
+ *   2. Delete everything in Code.gs and paste this whole file. Save.
+ *   3. (Optional) Select the `setup` function and click Run once — it creates the
+ *      "RSVP" and "Wishes" tabs with formatted headers and asks for permission.
+ *      If you skip this, the tabs are created automatically on the first response.
+ *   4. Deploy → New deployment → type "Web app"
+ *        Execute as:       Me
+ *        Who has access:   Anyone
+ *      Click Deploy and copy the Web app URL (ends in /exec).
+ *   5. Paste that URL into GOOGLE_SCRIPT_URL in src/googleSheets.ts.
+ *
+ *   If you later edit this script: Deploy → Manage deployments → ✏️ → Version: New version → Deploy
+ *   (this keeps the same /exec URL).
  */
 
-const SPREADSHEET_ID = '19cFsbd5VMS51EDmvPXbyW24qdhHObyWmDB368o6M0a4';
+const SPREADSHEET_ID = '1QTZ_S7wvID0_epx4DoiDBsIQr8iEF2VkSBLW-rPRN7k';
 const TIMEZONE = 'Asia/Colombo';
+const HEADER_BG = '#E8957A'; // peach
+const HEADER_FG = '#ffffff';
 
 const SHEETS = {
   rsvp: {
     name: 'RSVP',
-    headers: ['Timestamp', 'Name', 'Attending', 'Guest Count', 'Message', 'Invite Type', 'Submitted At (ISO)'],
-    widths: [170, 200, 110, 110, 360, 120, 210],
+    headers: ['Timestamp', 'Name', 'Attending', 'Guest Count', 'Invited To', 'Invitation Name', 'Message', 'Submitted At (ISO)'],
+    widths: [170, 200, 110, 110, 190, 200, 360, 210],
     row: (p) => [
       now_(),
       clean_(p.name),
       clean_(p.status),
       Number(p.guestCount) || 0,
+      clean_(p.invitedTo),
+      clean_(p.inviteLinkName),
       clean_(p.message),
-      clean_(p.inviteType),
       clean_(p.submittedAt),
     ],
   },
@@ -38,7 +54,7 @@ const SHEETS = {
   },
 };
 
-/** Run this once from the Apps Script editor to create both tabs up front (optional). */
+/** Run once from the Apps Script editor to create both tabs up front (optional). */
 function setup() {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   Object.keys(SHEETS).forEach((key) => getOrCreateSheet_(ss, key));
@@ -71,7 +87,7 @@ function doPost(e) {
 function doGet(e) {
   const action = String((e && e.parameter && e.parameter.action) || '').toLowerCase();
   if (action === 'health') {
-    return json_({ ok: true, service: 'anjalee-navindu-wedding', timestamp: new Date().toISOString() });
+    return json_({ ok: true, service: 'dilshi-roshen-wedding', timestamp: new Date().toISOString() });
   }
   return json_({ ok: true, message: 'POST with sheet=rsvp|wishes and payload=<json>' });
 }
@@ -95,23 +111,28 @@ function ensureHeaders_(sheet, cfg) {
   // Already has the correct headers — nothing to do.
   if (firstRow.join('|') === cfg.headers.join('|')) return;
 
-  // Sheet has data but no header row — insert one on top.
-  if (sheet.getLastRow() > 0) sheet.insertRowBefore(1);
+  // Row 1 looks like an older header row → overwrite it. Real data → insert a header row on top.
+  const looksLikeHeader = firstRow.length > 0 && firstRow[0] === 'Timestamp';
+  if (sheet.getLastRow() > 0 && !looksLikeHeader) sheet.insertRowBefore(1);
+
+  if (sheet.getMaxColumns() < cols) {
+    sheet.insertColumnsAfter(sheet.getMaxColumns(), cols - sheet.getMaxColumns());
+  }
 
   const header = sheet.getRange(1, 1, 1, cols);
   header
     .setValues([cfg.headers])
     .setFontWeight('bold')
-    .setFontColor('#ffffff')
-    .setBackground('#064e3b')
-    .setHorizontalAlignment('center')
-    .setVerticalAlignment('middle');
+    .setFontColor(HEADER_FG)
+    .setBackground(HEADER_BG)
+    .setHorizontalAlignment('center');
 
   sheet.setFrozenRows(1);
   sheet.setRowHeight(1, 32);
   cfg.widths.forEach((w, i) => sheet.setColumnWidth(i + 1, w));
-  sheet.getRange(2, 1, sheet.getMaxRows() - 1, 1).setNumberFormat('yyyy-mm-dd hh:mm:ss');
-  sheet.getRange(1, 1, sheet.getMaxRows(), cols).setWrap(true).setVerticalAlignment('top');
+  if (sheet.getMaxRows() > 1) {
+    sheet.getRange(2, 1, sheet.getMaxRows() - 1, cols).setWrap(true).setVerticalAlignment('top');
+  }
   header.setVerticalAlignment('middle');
 }
 

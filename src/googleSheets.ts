@@ -2,13 +2,19 @@ type SheetName = 'rsvp' | 'wishes';
 
 type SheetPayload = Record<string, string | number>;
 
-// Apps Script Web App for the Anjalee & Navindu RSVP + Wishes sheet.
+/**
+ * Apps Script Web App URL for the Dilshi & Roshen RSVP + Wishes sheet
+ * (https://docs.google.com/spreadsheets/d/1QTZ_S7wvID0_epx4DoiDBsIQr8iEF2VkSBLW-rPRN7k).
+ *
+ * Deploy google-apps-script/code.gs as a Web app (Execute as: Me, Access: Anyone)
+ * and paste the URL ending in /exec here.
+ */
 const GOOGLE_SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbx0ODX8kPE6_EwPOyyx979iF-TA9JU5XZDjaJ3nRbuGiNzs-6Xo1Pziy1Va_al4tGKD/exec';
+  'https://script.google.com/macros/s/AKfycbwOhH1Z-DFnXU6K59LY0_DGb02DhIQyBJtYYEl7H5fV5JrRbFrIlu7L2ttBT-gyimPR3A/exec';
 
 export async function submitToGoogleSheet(sheet: SheetName, payload: SheetPayload): Promise<void> {
-  if (!GOOGLE_SCRIPT_URL || !GOOGLE_SCRIPT_URL.startsWith('https://script.google.com/')) {
-    throw new Error('Google Apps Script URL is not configured');
+  if (!GOOGLE_SCRIPT_URL.startsWith('https://script.google.com/')) {
+    throw new Error('Google Apps Script URL is not configured (src/googleSheets.ts)');
   }
 
   const body = new URLSearchParams();
