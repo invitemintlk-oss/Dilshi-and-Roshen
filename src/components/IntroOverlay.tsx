@@ -45,8 +45,31 @@ export const IntroOverlay: React.FC<IntroOverlayProps> = ({ onStart, onEnter }) 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.8 }}
-            className="relative z-10 w-full h-full flex flex-col justify-end items-center pb-24 px-6 text-center"
+            className="relative z-10 w-full h-full flex flex-col justify-center items-center px-6 py-8 text-center"
           >
+            {/* Couple illustration in an arched, gold-trimmed frame */}
+            <motion.div
+              initial={{ opacity: 0, y: 25, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 1.4, ease: 'easeOut' }}
+              className="relative mb-6"
+            >
+              <div className="absolute -inset-6 rounded-full bg-[radial-gradient(circle,rgba(255,246,240,0.95)_0%,rgba(246,195,174,0.45)_55%,transparent_75%)] blur-xl" />
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                className="relative p-[6px] rounded-t-full rounded-b-[28px] bg-gradient-to-b from-[#f3d9a4] via-[#d9a441] to-[#b9822f] shadow-[0_20px_45px_rgba(138,70,50,0.45)]"
+              >
+                <div className="p-[3px] rounded-t-full rounded-b-[23px] bg-[#fff6f0]">
+                  <img
+                    src={WEDDING.introImage}
+                    alt={`${WEDDING.brideName} & ${WEDDING.groomName}`}
+                    className="block h-[min(50dvh,480px)] aspect-[736/1308] object-cover rounded-t-full rounded-b-[20px]"
+                  />
+                </div>
+              </motion.div>
+            </motion.div>
+
             <motion.h2
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}

@@ -115,3 +115,19 @@
   text-shadow: 0 0 2px rgba(255, 246, 240, 0.95), 0 0 10px rgba(255, 246, 240, 0.9), 0 0 22px rgba(255, 246, 240, 0.7);
 }
 .text-halo input, .text-halo textarea, .text-halo select, .text-halo button { text-shadow: none; }
+
+/* Butterfly wing flapping (FloatingButterflies) */
+.butterfly-wing-l,
+.butterfly-wing-r {
+  transform-box: fill-box;
+  animation: butterfly-flap var(--flap, 0.28s) ease-in-out infinite alternate;
+}
+.butterfly-wing-l { transform-origin: right center; }
+.butterfly-wing-r { transform-origin: left center; }
+@keyframes butterfly-flap {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0.25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .butterfly-wing-l, .butterfly-wing-r { animation: none; }
+}

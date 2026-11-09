@@ -19,6 +19,14 @@ export const WEDDING = {
   song: { src: '/Song.mp3', title: 'I Belong to You', artist: 'Jacob Lee' },
   background: '/l.webp',
   introVideo: '/gemini_generated_video_1c2126fd.mp4',
+  introImage: '/couple-intro.webp',
+
+  // "Our story" milestones. Add `photo: '/file.jpg'` to show a real photo instead of the icon.
+  story: [
+    { title: 'First We Met', year: '2008', icon: 'met' },
+    { title: 'When We Talk', year: '2020', icon: 'talk' },
+    { title: 'Forever Starts', year: '2026', icon: 'forever' },
+  ] as { title: string; year: string; icon: 'met' | 'talk' | 'forever'; photo?: string }[],
 
   // Per-section background images (public folder)
   sectionBackgrounds: {

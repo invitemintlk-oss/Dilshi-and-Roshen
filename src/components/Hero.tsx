@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { Sparkles, Heart } from 'lucide-react';
-import { FloatingPetals } from './FloatingPetals';
+import { FloatingButterflies } from './FloatingButterflies';
 
 export const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -79,7 +79,7 @@ export const Hero: React.FC = () => {
 
       {/* Persistent subtle falling petals in background */}
       <div className="absolute inset-0 z-[5] opacity-60">
-        <FloatingPetals />
+        <FloatingButterflies />
       </div>
 
       {/* Refined Scroll Indicator */}

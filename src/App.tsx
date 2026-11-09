@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Volume2, VolumeX } from 'lucide-react';
-import { FloatingPetals } from './components/FloatingPetals';
+import { FloatingButterflies } from './components/FloatingButterflies';
 
 import { Countdown } from './components/Countdown';
 import { HappyCouple } from './components/HappyCouple';
@@ -11,6 +11,7 @@ import { RSVPForm } from './components/RSVPForm';
 import { Footer } from './components/Footer';
 import { IntroOverlay } from './components/IntroOverlay';
 import { HeroContent } from './components/HeroContent';
+import { LoveStory } from './components/LoveStory';
 import { WishesForm } from './components/WishesForm';
 import { WEDDING, eventsFor, getInviteType } from './weddingConfig';
 
@@ -61,7 +62,7 @@ export default function App() {
         style={{ backgroundImage: `url('${WEDDING.background}')` }}
       />
       <div aria-hidden="true" className="fixed inset-0 z-0 bg-[#fff6f0]/40 pointer-events-none" />
-      <FloatingPetals />
+      <FloatingButterflies />
 
       {/* Background Music — "I Belong to You" by Jacob Lee */}
       <audio
@@ -113,6 +114,7 @@ export default function App() {
 
           <HeroContent />
           <Countdown targetDate={weddingDate} />
+          <LoveStory />
           <HappyCouple />
           <HomecomingDetails />
           <NoteFromUs />

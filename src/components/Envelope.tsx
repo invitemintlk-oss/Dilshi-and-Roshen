@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { FloatingPetals } from './FloatingPetals';
+import { FloatingButterflies } from './FloatingButterflies';
 
 interface EnvelopeProps {
   onComplete: () => void;
@@ -32,7 +32,7 @@ export const Envelope: React.FC<EnvelopeProps> = ({ onComplete }) => {
           <div className="absolute top-[-20%] right-[-10%] w-[100vw] h-[100vw] max-w-[1200px] max-h-[1200px] bg-[#cccccc]/10 blur-[150px] rounded-full opacity-60 pointer-events-none mix-blend-screen animate-pulse" style={{ animationDuration: '8s' }} />
           <div className="absolute bottom-[-20%] left-[-10%] w-[80vw] h-[80vw] max-w-[1000px] max-h-[1000px] bg-[#666666]/30 blur-[150px] rounded-full opacity-50 pointer-events-none mix-blend-screen" />
 
-          <FloatingPetals />
+          <FloatingButterflies />
 
           {/* Majestic Glow Behind Envelope */}
           <motion.div
