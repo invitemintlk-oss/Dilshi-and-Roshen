@@ -24,9 +24,9 @@ export const WEDDING = {
 
   // "Our story" milestones. Add `photo: '/file.jpg'` to show a real photo instead of the icon.
   story: [
-    { title: 'First We Met', year: '2008', icon: 'met', photo: '/f.jpg', focus: 'center 40%' },
+    { title: 'First We Met', year: '2008', icon: 'met', photo: '/p.jpg', focus: 'center' },
     { title: 'When We Talk', year: '2020', icon: 'talk', photo: '/g.jpg', focus: 'center 12%' },
-    { title: 'Forever Starts', year: '2026', icon: 'forever', photo: '/j.webp', focus: 'center 22%' },
+    { title: 'Forever Starts', year: '2027', icon: 'forever', photo: '/q.jpg', focus: 'center' },
   ] as { title: string; year: string; icon: 'met' | 'talk' | 'forever'; photo?: string; focus?: string }[],
 
   // Per-section background images (public folder)
