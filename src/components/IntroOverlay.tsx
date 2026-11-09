@@ -47,6 +47,15 @@ export const IntroOverlay: React.FC<IntroOverlayProps> = ({ onStart, onEnter }) 
             transition={{ duration: 0.8 }}
             className="relative z-10 w-full h-full flex flex-col justify-end items-center pb-24 px-6 text-center"
           >
+            <motion.h2
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, delay: 0.3 }}
+              className="mb-5 text-5xl sm:text-6xl text-[#8a4632] [text-shadow:0_0_6px_rgba(255,246,240,0.95),0_0_18px_rgba(255,246,240,0.9),0_0_30px_rgba(255,246,240,0.7)]"
+              style={{ fontFamily: "'Great Vibes', cursive" }}
+            >
+              You Are Welcome
+            </motion.h2>
             {displayName && (
               <p className="mb-6 px-6 py-2 rounded-full bg-[#fff6f0]/85 backdrop-blur-sm font-serif text-sm sm:text-base text-[#4a2a20] border border-[#d99a82]/50">
                 Dear <span className="text-[#8a4632] font-semibold">{displayName}</span>
