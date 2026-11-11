@@ -32,6 +32,26 @@ export const HappyCouple: React.FC = () => {
       {/* Image 8 is dark green, so the text sits on a soft cream card */}
       <div className="w-[calc(100%-2rem)] mx-auto relative z-10 flex flex-col items-center max-w-2xl bg-[#fff6f0]/85 backdrop-blur-sm rounded-t-[120px] rounded-b-[40px] border border-[#d99a82]/60 shadow-[0_20px_50px_rgba(0,0,0,0.25)] px-6 sm:px-12 py-14 sm:py-16">
         <motion.div
+          className="relative w-full max-w-[260px] sm:max-w-[300px] mb-10"
+          initial={{ opacity: 0, y: 30, scale: 0.96 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+        >
+          <div className="relative p-[5px] rounded-t-full rounded-b-[28px] bg-gradient-to-b from-[#f3d9a4] via-[#d9a441] to-[#b9822f] shadow-[0_18px_40px_rgba(90,26,36,0.3)]">
+            <div className="p-[3px] rounded-t-full rounded-b-[23px] bg-[#fff6f0]">
+              <img
+                src={WEDDING.happyCoupleImage}
+                alt={`${WEDDING.brideName} & ${WEDDING.groomName}`}
+                loading="lazy"
+                decoding="async"
+                className="block w-full aspect-[3/4] object-cover rounded-t-full rounded-b-[20px]"
+              />
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
           className="flex flex-col items-center text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

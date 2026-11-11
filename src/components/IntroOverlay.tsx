@@ -64,7 +64,7 @@ export const IntroOverlay: React.FC<IntroOverlayProps> = ({ onStart, onEnter }) 
                   <img
                     src={WEDDING.introImage}
                     alt={`${WEDDING.brideName} & ${WEDDING.groomName}`}
-                    className="block h-[min(50dvh,480px)] aspect-[736/1308] object-cover rounded-t-full rounded-b-[20px]"
+                    className="block h-[min(50dvh,480px)] aspect-[3/4] object-cover rounded-t-full rounded-b-[20px]"
                   />
                 </div>
               </motion.div>

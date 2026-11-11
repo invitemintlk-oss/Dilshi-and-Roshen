@@ -23,7 +23,7 @@ export const CouplePortrait: React.FC = () => (
               src={WEDDING.portraitImage}
               alt={`${WEDDING.brideName} & ${WEDDING.groomName}`}
               loading="lazy"
-              className="block w-full aspect-[2/3] object-cover rounded-t-full rounded-b-[24px]"
+              className="block w-full aspect-[3/4] object-cover rounded-t-full rounded-b-[24px]"
             />
           </div>
         </div>
