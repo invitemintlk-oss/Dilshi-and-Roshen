@@ -19,8 +19,8 @@ export const WEDDING = {
   song: { src: '/Song.mp3', title: 'I Belong to You', artist: 'Jacob Lee' },
   background: '/l.webp',
   introVideo: '/gemini_generated_video_1c2126fd.mp4',
-  introImage: '/couple-intro.webp',
-  portraitImage: '/couple-portrait.webp',
+  introImage: '/couple-intro-v2.webp',
+  portraitImage: '/couple-portrait-v2.webp',
   happyCoupleImage: '/couple-happy.webp',
 
   // "Our story" milestones. Add `photo: '/file.jpg'` to show a real photo instead of the icon.
